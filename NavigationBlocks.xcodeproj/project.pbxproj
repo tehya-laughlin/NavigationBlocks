@@ -11,6 +11,7 @@
 		2B68429F2AB1210800A969AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B68429E2AB1210800A969AF /* ContentView.swift */; };
 		2B6842A12AB1210900A969AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B6842A02AB1210900A969AF /* Assets.xcassets */; };
 		2B6842A42AB1210900A969AF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B6842A32AB1210900A969AF /* Preview Assets.xcassets */; };
+		2B6842AB2AB24F6C00A969AF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6842AA2AB24F6C00A969AF /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		2B68429E2AB1210800A969AF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2B6842A02AB1210900A969AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B6842A32AB1210900A969AF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2B6842AA2AB24F6C00A969AF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				2B68429C2AB1210800A969AF /* NavigationBlocksApp.swift */,
 				2B68429E2AB1210800A969AF /* ContentView.swift */,
+				2B6842AA2AB24F6C00A969AF /* Model.swift */,
 				2B6842A02AB1210900A969AF /* Assets.xcassets */,
 				2B6842A22AB1210900A969AF /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B6842AB2AB24F6C00A969AF /* Model.swift in Sources */,
 				2B68429F2AB1210800A969AF /* ContentView.swift in Sources */,
 				2B68429D2AB1210800A969AF /* NavigationBlocksApp.swift in Sources */,
 			);

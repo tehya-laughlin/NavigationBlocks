@@ -10,30 +10,24 @@ import SwiftUI
 struct ContentView: View {
     
     @State var blockStyles: [BlockStyle] = []
-    
+    @State var oneStyle: BlockStyle = BlockStyle(radii: [0,0,0,0,0], color: Color.blue)
     
     var body: some View {
         TabView {
             BlocksDisplay(blockStyles: $blockStyles, showingAlert: false).tabItem{
                 Label("Blocks", systemImage:"person")
             }
-            BlocksEdit(blockStyles: $blockStyles).tabItem{
+            BlocksEdit(blockStyles: $blockStyles, blockSee: $oneStyle).tabItem{
                 Label("Edit Blocks", systemImage:"globe")
             }
         }
     }
-    
 }
 
-struct BlockStyle: Identifiable {
-    var radii: [Int]
-    var color: Color
-    var id: Int{radii[0]}
-}
 
 //Blocks Display: as tab 1, displays the squares, as added in edit mode
-//@param: array of tuples: array of doubles, color
-//@param: bool for button alert
+//@param: array of BlockStyles
+//intialize bool for button alert
 //calls Squares iteratively over the array of tups
 //button -> clear all blocks, alert checkpoint, on OK, clear array of tups
 struct BlocksDisplay: View {
@@ -41,26 +35,33 @@ struct BlocksDisplay: View {
     @Binding var blockStyles: [BlockStyle]
     @State var showingAlert: Bool
     
-    
     var body: some View {
-        VStack{
-            
-            Button("Clear All Blocks") {
-                showingAlert = true
-            }.alert("Are you sure you want to clear your blocks?", isPresented: $showingAlert){
-                Button("OK", role: .none) {
-                    blockStyles = []
+        NavigationView{
+            VStack {
+                
+                Button("Clear All Blocks") {
+                    showingAlert = true
+                }.alert("Are you sure you want to clear your blocks?", isPresented: $showingAlert){
+                    Button("OK", role: .none) {
+                        blockStyles = []
+                    }
+                    Button("Cancel", role: .cancel) {}
                 }
-                Button("Cancel", role: .cancel) {}
-            }
-            
-            ForEach($blockStyles){
-                BlockStyle in
+                .padding(.top, 30)
                 
-                Squares(radii: BlockStyle.radii, color: BlockStyle.color)
-                
-            }
-            
+                ScrollView{
+                    VStack {
+                        ForEach($blockStyles){
+                            BlockStyle in
+                            
+                            Squares(radii: BlockStyle.radii, color: BlockStyle.color)
+                            
+                        }
+                    }
+                }
+                .frame(height: 500)
+                .padding(.top, 30)
+            }.navigationTitle("Blocks")
         }
     }
     
@@ -74,18 +75,18 @@ struct BlocksDisplay: View {
 struct BlocksEdit: View {
     @Binding var blockStyles: [BlockStyle]
     @State var colorSwitch: Bool = false
-    @State var newStyle: BlockStyle = BlockStyle(radii: [],color: Color.blue)
+    @Binding var blockSee: BlockStyle
     @State var sheetPres: Bool = false
     @State var radii: [Int] = [0,0,0,0,0]
     @State var seeNew: Bool = false;
-    
+    @State var color: Color = Color.blue
     
     var body: some View {
         NavigationView {
             VStack {
-                Toggle("Switch Color", isOn: $colorSwitch)
-                    .frame(width: 170.0, height: 30.0)
-                    .tint(Color.blue)
+                
+                ColorPicker("Color", selection: $color)
+                    .frame(width: 100.0, height: 100.0)
                 
                 Button("Radii") {
                     sheetPres = true
@@ -98,24 +99,29 @@ struct BlocksEdit: View {
                 
                 Button("Add Blocks"){
                     
-                    newStyle.radii = radii
-                    newStyle.color = colorSwitch == true ? Color.blue : Color(red: 0.059, green: 0.006, blue: 0.177)
-                    blockStyles.append(newStyle)
+                    blockSee.radii = radii
+                    blockSee.color = color
+                    blockStyles.append(blockSee)
                     
                     radii = [0,0,0,0,0]
-                    colorSwitch = false
                     seeNew = true
                     
-                }
+                }.padding(.top, 30)
                 
                 if(seeNew){
                     NavigationLink("See the new blocks or go to Blocks Tab"){
-                        SeeNewBlocks(blocks: $newStyle, tog: $seeNew)
-                    }
+                        SeeNewBlocks(blocks: $blockSee, tog: $seeNew)
+                    }.padding(.top, 30)
                 }
+            }.onAppear{
+                seeNew = false
+                color = Color.blue
+               
             }
-        }.navigationTitle("Edit Blocks")
+            .navigationTitle("Edit Blocks")
+        }
     }
+    
 }
 
 //Edit radii: ^
@@ -133,22 +139,24 @@ struct Radii: View {
             Stepper(value: $radii[0], in: 0...35, step:5) {
                 Text("Border Radius 1: \(radii[0])")
             }
+            .frame(width: /*@START_MENU_TOKEN@*/275.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
             
             Stepper(value: $radii[1], in: 0...35, step:5) {
                 Text("Border Radius 2: \(radii[1])")
             }
+            .frame(width: 275.0, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
             
             Stepper(value: $radii[2], in: 0...35, step:5) {
                 Text("Border Radius 3: \(radii[2])")
-            }
+            }.frame(width: /*@START_MENU_TOKEN@*/275.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
             
             Stepper(value: $radii[3], in: 0...35, step:5) {
                 Text("Border Radius 4: \(radii[3])")
-            }
+            }.frame(width: /*@START_MENU_TOKEN@*/275.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
             
             Stepper(value: $radii[4], in: 0...35, step:5) {
                 Text("Border Radius 5: \(radii[4])")
-            }
+            }.frame(width: /*@START_MENU_TOKEN@*/275.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
             
             
             HStack {
@@ -161,6 +169,7 @@ struct Radii: View {
                     dismiss()
                 }
             }
+            .frame(width: /*@START_MENU_TOKEN@*/150.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/60.0/*@END_MENU_TOKEN@*/)
         }
     }
 }
@@ -175,7 +184,7 @@ struct SeeNewBlocks: View{
         NavigationView{
             VStack(content: {
                 Squares(radii: $blocks.radii, color: $blocks.color)
-               
+                
             })
            
         } .navigationBarTitle("New Blocks")
